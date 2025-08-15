@@ -744,3 +744,708 @@ const flatten1 = arr => [].concat(...arr);
 
 ### Event Propagation
 - Capturing: root → target; Bubbling: target → root. Use event delegation by listening on a common ancestor and filtering by `event.target` to handle dynamic lists efficiently.
+
+## JavaScript Coding Questions and Answers (Last Updated: 05 Aug, 2025)
+
+JavaScript is the most commonly used interpreted, and scripted programming language. It is used to make web pages, mobile applications, web servers, and other platforms. Developed in 1995 by Brendan Eich. Developers should have a solid command over this because many job roles need proficiency in JavaScript.
+
+We will see the Top 50 JavaScript coding questions and answers including basic and medium JavaScript coding questions and answers. In this section, we cover JavaScript core concepts such as arrays, strings, arrow functions, and classes. These Top 50 coding questions and answers will help you to improve your coding concept in JavaScript.
+
+### Basic JavaScript Coding Questions and Answers
+
+1) Write a Program to reverse a string in JavaScript.
+This code splits the string into an array of characters using `split()`, reverses the array, and joins it back into a string using `join()`.
+
+```javascript
+function reverseString(str) {
+  return str.split("").reverse().join("");
+}
+
+console.log(reverseString("GeeksForGeeks"));
+// Output: skeeGroFskeeG
+```
+
+2) Write a Program to check whether a string is a palindrome string.
+Checks if a string is a palindrome by reversing it and comparing it to the original.
+
+```javascript
+function isPalindrome(str) {
+  const reversed = str.split("").reverse().join("");
+  return str === reversed;
+}
+
+console.log(isPalindrome("GFG"));
+// Output: true
+```
+
+3) Find the largest number in an array in JavaScript.
+Using a for loop:
+
+```javascript
+function findLargest(arr) {
+  let largest = arr[0];
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > largest) {
+      largest = arr[i];
+    }
+  }
+  return largest;
+}
+
+console.log(findLargest([99, 5, 3, 100, 1]));
+// Output: 100
+```
+
+Using the spread operator and Math.max:
+
+```javascript
+function findLargest(arr) {
+  return Math.max(...arr);
+}
+
+console.log(findLargest([99, 5, 3, 100, 1]));
+// Output: 100
+```
+
+4) How to remove the first element from an array in JavaScript?
+
+```javascript
+let arr = [5, 6, 7];
+arr = arr.slice(1);
+console.log(arr);
+// Output: [6, 7]
+```
+
+5) Write a Program to use a callback function.
+
+```javascript
+function greet(name, callback) {
+  callback(`Hello, ${name}!`);
+}
+greet("Geek", message => console.log(message));
+// Output: Hello, Geek!
+```
+
+6) Write code to create an arrow function.
+
+```javascript
+const add = (a, b) => a + b;
+console.log(add(6, 2));
+// Output: 8
+```
+
+7) Write a Program to add a property to an object.
+
+```javascript
+const obj = { name: "Riya" };
+obj.age = 21;
+console.log(obj);
+// Output: { name: 'Riya', age: 21 }
+```
+
+8) Write a Program to delete a property from an object.
+
+```javascript
+const obj = { name: "Riya", age: 21 };
+delete obj.age;
+console.log(obj);
+// Output: { name: 'Riya' }
+```
+
+9) What will be the output of the given code?
+
+```javascript
+console.log([1, 2, 3].reduce((a, b) => a + b));
+// Output: 6
+```
+
+10) What will be the output of the given code?
+
+```javascript
+console.log("gfg".repeat(3));
+// Output: gfggfggfg
+```
+
+11) What will be the output of the given code?
+
+```javascript
+console.log(1 + "2");
+// Output: '12'
+```
+
+12) What will be the output of the given code?
+
+```javascript
+console.log("6" - 1);
+// Output: 5
+```
+
+13) What will be the output of the given code?
+
+```javascript
+console.log(1 === "1");
+// Output: false
+```
+
+14) What will be the output of the given code?
+
+```javascript
+console.log(null == undefined);
+// Output: true
+```
+
+15) Write a Program to find the sum of an array.
+
+```javascript
+function sumArray(arr) {
+  let sum = 0;
+  for (let i = 0; i < arr.length; i++) {
+    sum += arr[i];
+  }
+  return sum;
+}
+
+console.log(sumArray([15, 6, 10, 2]));
+// Output: 33
+```
+
+16) Write a Program to check if a number is prime or not.
+
+```javascript
+function isPrime(num) {
+  if (num <= 1) return false;
+  for (let i = 2; i < num; i++) {
+    if (num % i === 0) return false;
+  }
+  return true;
+}
+
+console.log(isPrime(7));
+// Output: true
+```
+
+17) Write a Program to print Fibonacci sequence up to n terms.
+
+```javascript
+function fibonacci(n) {
+  let num1 = 0, num2 = 1, nextNum;
+  console.log("Fibonacci Sequence:");
+  for (let i = 1; i <= n; i++) {
+    console.log(num1);
+    nextNum = num1 + num2;
+    num1 = num2;
+    num2 = nextNum;
+  }
+}
+
+fibonacci(7);
+/* Output:
+Fibonacci Sequence:
+0
+1
+1
+2
+3
+5
+8
+*/
+```
+
+18) Write a Program to find factorial of a number.
+
+```javascript
+function factorial(num) {
+  let answer = 1;
+  for (let i = 2; i <= num; i++) {
+    answer *= i;
+  }
+  return answer;
+}
+
+console.log(factorial(7));
+// Output: 5040
+```
+
+19) Calculate the power of a number in JavaScript.
+
+```javascript
+function power(base, exponent) {
+  return base ** exponent;
+}
+
+console.log(power(3, 4));
+// Output: 81
+```
+
+20) Write a Program to print the frequency of elements in an array.
+
+```javascript
+function frequency(arr) {
+  const freq = {};
+  for (let i = 0; i < arr.length; i++) {
+    if (freq[arr[i]]) {
+      freq[arr[i]] += 1;
+    } else {
+      freq[arr[i]] = 1;
+    }
+  }
+  return freq;
+}
+
+console.log(frequency([1, 1, 2, 3, 3, 4]));
+// Output: { '1': 2, '2': 1, '3': 2, '4': 1 }
+```
+
+### Medium JavaScript Coding Questions and Answers
+
+21) Write a Program to count the occurrences of a character in a string.
+Using `split()` method:
+
+```javascript
+function countChar(str, char) {
+  return str.split(char).length - 1;
+}
+
+console.log(countChar("GeeksForGeeks", "G"));
+// Output: 2
+```
+
+Using a for loop:
+
+```javascript
+function countChar(str, char) {
+  let count = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === char) {
+      count++;
+    }
+  }
+  return count;
+}
+
+console.log(countChar("GeeksForGeeks", "G"));
+// Output: 2
+```
+
+22) Convert Celsius to Fahrenheit.
+
+```javascript
+function celsiusToFahrenheit(celsius) {
+  return (celsius * 9 / 5) + 32;
+}
+
+console.log(celsiusToFahrenheit(20));
+// Output: 68
+```
+
+23) Convert Fahrenheit to Celsius.
+
+```javascript
+function fahrenheitToCelsius(fahrenheit) {
+  return (fahrenheit - 32) * 5 / 9;
+}
+
+console.log(fahrenheitToCelsius(68));
+// Output: 20
+```
+
+24) Sort an array in ascending order.
+
+```javascript
+function sortArray(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] > arr[j]) {
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      }
+    }
+  }
+  return arr;
+}
+
+console.log(sortArray([5, 3, 8, 1]));
+// Output: [1, 3, 5, 8]
+```
+
+25) Sort an array in descending order.
+
+```javascript
+function sortArrayDesc(arr) {
+  let n = arr.length;
+  for (let i = 0; i < n - 1; i++) {
+    for (let j = 0; j < n - 1 - i; j++) {
+      if (arr[j] < arr[j + 1]) {
+        let temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+      }
+    }
+  }
+  return arr;
+}
+
+console.log(sortArrayDesc([5, 3, 8, 1]));
+// Output: [8, 5, 3, 1]
+```
+
+26) Merge two arrays in JavaScript.
+
+```javascript
+function mergeArrays(arr1, arr2) {
+  return arr1.concat(arr2);
+}
+
+console.log(mergeArrays([5, 6], [7, 8]));
+// Output: [5, 6, 7, 8]
+```
+
+27) Find the intersection of two arrays.
+
+```javascript
+function arrayIntersection(arr1, arr2) {
+  const set2 = new Set(arr2);
+  return arr1.filter(value => set2.has(value));
+}
+
+console.log(arrayIntersection([5, 6, 7], [6, 7, 8]));
+// Output: [6, 7]
+```
+
+28) Find the union of two arrays.
+
+```javascript
+function arrayUnion(arr1, arr2) {
+  return [...new Set([...arr1, ...arr2])];
+}
+
+console.log(arrayUnion([1, 2, 3], [2, 3, 4]));
+// Output: [1, 2, 3, 4]
+```
+
+29) Check if a number is even or odd.
+
+```javascript
+function isEven(num) {
+  return num % 2 === 0;
+}
+console.log(isEven(10));
+// Output: true
+```
+
+30) Find the minimum value in an array.
+Using for loop:
+
+```javascript
+function findMin(arr) {
+  let min = arr[0];
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < min) {
+      min = arr[i];
+    }
+  }
+  return min;
+}
+
+console.log(findMin([5, 10, -1, 8]));
+// Output: -1
+```
+
+Using Math.min:
+
+```javascript
+function findMin(arr) {
+  return Math.min(...arr);
+}
+
+console.log(findMin([5, 10, -1, 8]));
+// Output: -1
+```
+
+31) Check if a string contains another string.
+
+```javascript
+function containsSubstring(str, substring) {
+  return str.indexOf(substring) !== -1;
+}
+
+console.log(containsSubstring("GeeksForGeeks", "For"));
+// Output: true
+```
+
+32) Find the first non-repeated character in a string.
+
+```javascript
+function firstNonRepeated(str) {
+  const charCount = {};
+  for (let char of str) {
+    charCount[char] = (charCount[char] || 0) + 1;
+  }
+  for (let char of str) {
+    if (charCount[char] === 1) return char;
+  }
+  return null;
+}
+
+console.log(firstNonRepeated("GeeksForGeeks"));
+// Output: F
+```
+
+33) Find the longest word in a string.
+
+```javascript
+function longestWord(str) {
+  const words = str.split(" ");
+  let longest = "";
+  for (let word of words) {
+    if (word.length > longest.length) longest = word;
+  }
+  return longest;
+}
+
+console.log(longestWord("GeeksForGeeks is great"));
+// Output: GeeksForGeeks
+```
+
+34) Capitalize the first letter of each word in a sentence.
+
+```javascript
+function capitalizeFirstLetter(sentence) {
+  const words = sentence.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+  }
+  return words.join(" ");
+}
+
+console.log(capitalizeFirstLetter("hello geeks"));
+// Output: Hello Geeks
+```
+
+35) Convert an array of strings to uppercase.
+
+```javascript
+function toUpperCaseArray(arr) {
+  const upperCaseArray = [];
+  for (let i = 0; i < arr.length; i++) {
+    upperCaseArray[i] = arr[i].toUpperCase();
+  }
+  return upperCaseArray;
+}
+
+console.log(toUpperCaseArray(["g", "f", "g"]));
+// Output: ['G', 'F', 'G']
+```
+
+### Hard JavaScript Coding Questions and Answers
+
+36) Write a Program to reverse an array.
+
+```javascript
+function reverseArray(arr) {
+  const reversed = [];
+  for (let i = arr.length - 1; i >= 0; i--) {
+    reversed.push(arr[i]);
+  }
+  return reversed;
+}
+
+console.log(reverseArray([5, 6, 7, 8]));
+// Output: [8, 7, 6, 5]
+```
+
+37) Get the last element of an array.
+
+```javascript
+function lastElement(arr) {
+  return arr[arr.length - 1];
+}
+
+console.log(lastElement([6, 2, 9, 5]));
+// Output: 5
+```
+
+38) Remove falsy values from an array.
+
+```javascript
+function removeFalsyValues(arr) {
+  const answer = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i]) {
+      answer[answer.length] = arr[i];
+    }
+  }
+  return answer;
+}
+
+console.log(removeFalsyValues([0, 5, false, 6, '', 7]));
+// Output: [5, 6, 7]
+```
+
+39) Calculate the factorial of a number using recursion.
+
+```javascript
+function factorial(n) {
+  if (n === 0 || n === 1) return 1;
+  return n * factorial(n - 1);
+}
+
+console.log(factorial(4));
+// Output: 24
+```
+
+40) Create an object and print the property.
+
+```javascript
+let person = { name: "GFG", age: 25 };
+console.log(person.name);
+// Output: GFG
+```
+
+41) Use the map function on an array.
+
+```javascript
+let numbers = [5, 6, 7];
+let ans = numbers.map(function (num) {
+  return num * 2;
+});
+console.log(ans);
+// Output: [10, 12, 14]
+```
+
+42) Write a Program to create a simple class in JavaScript.
+
+```javascript
+class Animals {
+  constructor(name) {
+    this.name = name;
+  }
+  speak() {
+    console.log(`${this.name} makes a noise`);
+  }
+}
+let dog = new Animals("Dog");
+dog.speak();
+// Output: Dog makes a noise
+```
+
+43) Use JSON to parse and stringify data in JavaScript.
+
+```javascript
+let jsonData = '{"name": "Geeks"}';
+let parsedData = JSON.parse(jsonData);
+console.log(parsedData.name);
+// Output: Geeks
+```
+
+44) Convert a string to an array of words.
+
+```javascript
+let sentence = "Geeks For Geeks";
+let wordsArray = sentence.split(" ");
+console.log(wordsArray);
+// Output: ['Geeks', 'For', 'Geeks']
+```
+
+45) Write a switch statement.
+
+```javascript
+let course = "javascript";
+switch (course) {
+  case "javascript":
+    console.log("This is a javascript course");
+    break;
+  default:
+    console.log("Not a javascript course");
+}
+// Output: This is a javascript course
+```
+
+46) Check if two strings are anagrams.
+
+```javascript
+function areAnagrams(str1, str2) {
+  if (str1.length !== str2.length) return false;
+  let count1 = {}, count2 = {};
+  for (let i = 0; i < str1.length; i++) {
+    count1[str1[i]] = (count1[str1[i]] || 0) + 1;
+    count2[str2[i]] = (count2[str2[i]] || 0) + 1;
+  }
+  for (let ch in count1) {
+    if (count1[ch] !== count2[ch]) return false;
+  }
+  return true;
+}
+
+console.log(areAnagrams("listen", "silent"));
+// Output: true
+```
+
+47) Find the maximum difference between two numbers in an array.
+
+```javascript
+function maxDifference(arr) {
+  let min = arr[0];
+  let maxDiff = 0;
+  for (let i = 1; i < arr.length; i++) {
+    const diff = arr[i] - min;
+    maxDiff = Math.max(maxDiff, diff);
+    min = Math.min(min, arr[i]);
+  }
+  return maxDiff;
+}
+
+console.log(maxDifference([1, 2, 90, 10, 110]));
+// Output: 109
+```
+
+48) Remove duplicates from an array.
+
+```javascript
+function removeDuplicates(arr) {
+  const uniqueArray = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (!uniqueArray.includes(arr[i])) {
+      uniqueArray.push(arr[i]);
+    }
+  }
+  return uniqueArray;
+}
+
+console.log(removeDuplicates([5, 2, 5, 6, 6, 7]));
+// Output: [5, 2, 6, 7]
+```
+
+49) Count vowels in a string.
+
+```javascript
+function countVowels(str) {
+  let count = 0;
+  const vowels = "aeiouAEIOU";
+  for (let i = 0; i < str.length; i++) {
+    if (vowels.includes(str[i])) count++;
+  }
+  return count;
+}
+
+console.log(countVowels("hello geek"));
+// Output: 4
+```
+
+50) Get unique characters from a string.
+
+```javascript
+function uniqueCharacters(str) {
+  const uniqueChars = [];
+  for (let i = 0; i < str.length; i++) {
+    if (!uniqueChars.includes(str[i])) {
+      uniqueChars.push(str[i]);
+    }
+  }
+  return uniqueChars.join('');
+}
+
+console.log(uniqueCharacters("geeksforgeeks"));
+// Output: geksfor
+```

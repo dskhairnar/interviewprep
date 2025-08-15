@@ -151,3 +151,42 @@ EMS2/                # Frontend
 3. **Real-time Updates**: Used polling for data updates
 4. **Responsive Design**: Tailwind CSS for mobile-first approach
 5. **API Security**: JWT middleware for route protection
+
+## Possible Interview Questions (EMS) with Sample Answers
+
+### 1) Why MERN for EMS?
+**Answer**: MERN enables rapid CRUD and real-time UX: MongoDB’s flexible schemas model employee, attendance, and leave records; Express provides a simple REST layer; React/Vite gives fast interactive dashboards; JWT supports stateless auth, easy to scale horizontally.
+
+### 2) How is authentication and authorization handled?
+**Answer**: Passwords are bcrypt-hashed. On login, the server signs a JWT with user id and role (24h TTL). The frontend stores it in `localStorage` and attaches via Axios interceptor. Protected routes use `auth` middleware to verify the token from `Authorization` or `x-auth-token` and expose `req.user`. Role checks can be enforced in route handlers for admin-only endpoints.
+
+### 3) How do you protect admin endpoints?
+**Answer**: Add a role guard after `auth` middleware:
+```js
+function requireAdmin(req, res, next) {
+  if (req.user?.role !== 'admin') return res.status(403).json({ message: 'Forbidden' });
+  next();
+}
+```
+Use it on admin routes like leaves/attendance listing and department CRUD.
+
+### 4) How are reports generated efficiently?
+**Answer**: Use MongoDB aggregation pipelines with indexes on `employeeId`, `date`, `departmentId`, and `status`. For monthly reports, filter by `$gte/$lt` date boundaries and group by department or status. Optionally cache frequently accessed monthly aggregates.
+
+### 5) How do you prevent duplicate daily attendance?
+**Answer**: Enforce a unique compound index on `(employeeId, date)` at day resolution. In the service, use upsert or check before insert to avoid duplicates.
+
+### 6) How is data validated?
+**Answer**: Request schemas validated in middleware (Joi/Zod) and at the Mongoose level with schema validators. Rejects invalid date ranges for leaves and ensures required fields for employees.
+
+### 7) How do you handle CORS and security?
+**Answer**: CORS configured to allow the dev origin (5173) and production origin. Use `helmet`, rate limiting, and input sanitization. JWT expiry and rotation policies mitigate token theft risk.
+
+### 8) How would you scale EMS?
+**Answer**: Stateless API with JWT supports horizontal scaling behind a load balancer; move sessions to Redis if needed for rate limiting; shard or partition attendance/leave collections by date or department; use read replicas for reports; adopt message queues for heavy tasks.
+
+### 9) Backup and disaster recovery?
+**Answer**: Automated daily backups of MongoDB, point-in-time recovery on Atlas, and infrastructure as code for reproducible environments.
+
+### 10) What were the hardest bugs?
+**Answer**: Token desync between tabs and stale role state. Fixed with an auth context that subscribes to `storage` events and token verification ping on mount.

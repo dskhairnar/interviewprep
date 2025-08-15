@@ -202,3 +202,35 @@ The CRM system was developed to streamline the stock market company's operations
 - **Advanced Analytics**: Machine learning for investment recommendations
 - **API Marketplace**: Third-party integrations
 - **Blockchain**: Secure transaction recording
+
+## Possible Interview Questions (CRM) with Sample Answers
+
+### 1) Why a custom CRM instead of an off-the-shelf tool?
+**Answer**: Domain-specific needs—KYC workflows, investment portfolio tracking, SEBI compliance—aren’t covered well by generic CRMs. Custom build offers tighter integration with stock market APIs and tailored compliance checks.
+
+### 2) How is KYC handled end-to-end?
+**Answer**: Users upload documents via a secure file upload pipeline (Multer → cloud storage). Metadata is saved in MongoDB with status transitions (pending → verified/rejected). Admins verify documents; expirations trigger alerts. Access to documents is restricted and URLs are short-lived.
+
+### 3) How do you ensure data privacy and compliance?
+**Answer**: PII is encrypted at rest; transport secured with TLS. Least-privilege access, audit logs for sensitive operations, and comprehensive data retention policies. Regular security scans and dependency updates.
+
+### 4) How do you model leads → clients conversion?
+**Answer**: Leads have a lifecycle status; conversion creates a `Client` entity referencing the original `leadId`, preserving history. Transactions ensure consistency when migrating notes and interactions.
+
+### 5) How do you integrate real-time stock data?
+**Answer**: Use provider webhooks/polling to refresh holdings; cache quotes with TTL; decouple ingestion via a queue so the UI remains responsive. Handle provider rate limits via backoff and batching.
+
+### 6) What indexing strategies improved performance most?
+**Answer**: Compound indexes on `(assignedManager, status)`, text index on lead notes, and TTL/indexes where applicable for temp data. Use `explain()` to tune slow queries.
+
+### 7) How do you prevent duplicate leads?
+**Answer**: Normalize and deduplicate on `(email, phone)` with unique partial indexes; add fuzzy matching for near-duplicates and a manual merge flow.
+
+### 8) How would you scale this system?
+**Answer**: Separate services for auth, KYC, and investments; use message queues for document processing; add read replicas for analytics; partition large collections; CDN for static assets.
+
+### 9) Disaster recovery?
+**Answer**: Automated backups, cross-region replication, and runbooks for failover. Routine restoration drills to validate backups.
+
+### 10) Security pitfalls avoided?
+**Answer**: Avoided storing permanent public URLs for documents; enforced strict MIME/type checks; implemented rate limiting on uploads and verification endpoints.

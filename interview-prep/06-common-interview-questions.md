@@ -540,3 +540,47 @@ CMD ["npm", "start"]
 5. What are the biggest technical challenges the team faces?
 6. How does the team approach testing and deployment?
 7. What is the team structure and collaboration like?
+
+## Additional Node.js/Backend Interview Questions (with brief pointers)
+
+1. Explain backpressure in streams and how to handle it.
+   - Check `writable.write()` boolean; pause/resume or wait for `drain` before writing more.
+2. How do you secure JWTs on the web?
+   - Prefer HttpOnly, Secure, SameSite cookies; rotate/short expiry; verify audience/issuer.
+3. What is the difference between authentication and authorization?
+   - AuthN: who you are; AuthZ: what you can do.
+4. How to implement request id correlation?
+   - Generate UUID per request in middleware; pass via headers; log with the id.
+5. What are idempotent HTTP methods and why they matter?
+   - GET, PUT, DELETE are idempotent; safe retries and deduplication.
+6. How to design rate limiting?
+   - Token bucket, store counters in Redis with expiry; key by IP/user; return 429.
+7. How to migrate databases safely?
+   - Backwards-compatible migrations, expand-and-contract, feature flags, rollbacks.
+8. How to handle file uploads reliably?
+   - Stream to storage, validate size/type, checksum, virus scan, resumable uploads if large.
+9. Compare SQL vs NoSQL for your project.
+   - Access patterns, schema rigidity, transactions, scaling, reporting needs.
+10. How would you paginate large lists?
+   - Prefer cursor-based pagination over offset for performance at scale.
+
+## Additional JavaScript Interview Questions
+
+1. Explain event delegation and why it’s useful.
+2. What is the difference between `bind`, `call`, and `apply`?
+3. How does garbage collection work in V8 (mark-and-sweep, generations)?
+4. Explain `map`, `filter`, `reduce` and when to use each.
+5. What is a memory leak in JS and how to detect/prevent it?
+6. Difference between deep and shallow copy; limitations of `JSON.parse(JSON.stringify())`.
+7. What are web workers and when would you use them?
+8. Explain CORS preflight and how to configure correctly.
+9. What is the difference between `for...of` and `for...in`?
+10. Explain `Symbol` and real-world uses (private-ish keys, well-known symbols).
+
+## System Design Style Questions (Brief)
+
+1. Design an authentication service supporting JWT and refresh tokens.
+2. Design a notification system (email/SMS/push) with retries and deduplication.
+3. Design a file processing pipeline (uploads, virus scanning, metadata extraction).
+4. Design an analytics event ingestion service (high write throughput, query needs).
+5. Design a leaderboard with frequent updates and top-k queries.

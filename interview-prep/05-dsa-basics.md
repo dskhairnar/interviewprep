@@ -671,3 +671,32 @@ function fibonacci(n, memo = {}) {
 6. **Handle edge cases**: Empty arrays, null values, etc.
 7. **Write clean code**: Use meaningful variable names
 8. **Practice common patterns**: Two pointers, sliding window, etc.
+
+## Frequently Asked DSA Interview Questions (Basics)
+
+### Conceptual
+- **What is the difference between array and linked list?**
+  - Array: contiguous memory, O(1) random access, expensive inserts/deletes in middle; Linked list: non-contiguous nodes, O(n) access, O(1) insert/delete at head.
+- **Stack vs Queue use-cases?**
+  - Stack: backtracking, function call stack, undo; Queue: BFS, task scheduling, producer-consumer.
+- **Stable vs unstable sorting?**
+  - Stable keeps equal elements' relative order (Merge Sort), unstable may not (Quick Sort typical implementations).
+- **Hash table collisions handling?**
+  - Separate chaining (lists/buckets), open addressing (linear/quadratic probing, double hashing).
+- **Big-O of common operations**
+  - Hash map: average O(1) get/set, worst O(n); Binary search tree balanced: O(log n) search/insert/delete.
+
+### Quick Practice Q&A
+- **Find middle of linked list**: Use slow/fast pointers; when fast reaches end, slow is middle.
+- **Detect cycle in linked list**: Floyd’s Tortoise and Hare; if pointers meet, cycle exists.
+- **Reverse a linked list**: Iterate with three pointers: prev, curr, next.
+- **Validate binary search tree**: DFS with value bounds (min, max) propagated to children.
+- **Binary tree traversal orders**: Preorder (NLR), Inorder (LNR), Postorder (LRN), Level-order (BFS).
+- **Two-sum variations**: Unsorted use hash map; sorted use two pointers.
+- **Maximum sliding window**: Use deque storing indices of decreasing elements → O(n).
+- **Kth largest element**: Use min-heap of size k (O(n log k)) or Quickselect average O(n).
+- **Merge K sorted lists**: Min-heap by head values or divide-and-conquer.
+- **Top-K frequent elements**: Hash frequencies + bucket sort or min-heap of size k.
+
+### Common Patterns to Recognize
+- Two pointers, Sliding window, Fast/slow pointers, Monotonic stack/deque, Prefix sums, Binary search on answer, DFS/BFS, Backtracking, Dynamic programming (knapsack, LIS), Greedy (intervals), Union-Find (disjoint sets).

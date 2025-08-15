@@ -668,3 +668,79 @@ const memoizedFibonacci = memoize((n) => {
   return memoizedFibonacci(n - 1) + memoizedFibonacci(n - 2);
 });
 ```
+
+## Additional JavaScript Technical Terms (Glossary)
+
+- **Primitive vs Reference types**: Primitives (string, number, boolean, null, undefined, symbol, bigint) are immutable and compared by value; objects/arrays/functions are reference types.
+- **Pass-by-value vs pass-by-reference**: JS always passes function arguments by value; for objects, the value is a reference.
+- **Prototype chain**: Object resolution path for properties via `[[Prototype]]` (accessible by `Object.getPrototypeOf`); classes are syntactic sugar over prototypes.
+- **this binding**: Determined by call-site: default/global, implicit (obj.method), explicit (`call/apply/bind`), constructor (`new`), lexical in arrow functions.
+- **Closures**: Functions that capture outer lexical scope; common in factories, memoization, and module patterns.
+- **Event loop and task queues**: Macrotasks (setTimeout, I/O) and microtasks (Promise jobs, `queueMicrotask`); microtasks run before next macrotask.
+- **Shallow vs deep copy**: Shallow copies copy top-level references; deep copies recursively copy nested objects; use structuredClone for safe deep copies when available.
+- **Truthy/Falsy**: Falsy values: 0, -0, 0n, '', null, undefined, NaN, false. Everything else is truthy.
+- **Coercion**: Implicit (using `==`, concatenation) vs explicit (`Number()`, `String()`); avoid surprises by using `===`.
+- **Debounce vs throttle**: Debounce delays execution until inactivity; throttle limits executions per unit time.
+- **Immutability**: Favor immutable updates (spread, `Object.assign`) to avoid side-effects; key in React state updates.
+- **Module resolution**: ESM URL-based resolution vs CommonJS path resolution; tree-shaking works best with ESM and pure modules.
+- **Generators**: Functions that can pause/resume using `yield`; useful for lazy sequences and cooperative concurrency.
+- **Iterables/Iterators**: Protocols enabling `for...of`; implement `[Symbol.iterator]`.
+- **Proxy/Reflect**: Intercept operations on objects to create meta-programming utilities.
+
+## Handy JS One-liners
+
+```javascript
+// Unique array
+const unique = arr => [...new Set(arr)];
+
+// Group by key
+const groupBy = (arr, key) => arr.reduce((acc, item) => ((acc[item[key]] ||= []).push(item), acc), {});
+
+// Clamp number
+const clamp = (n, min, max) => Math.min(Math.max(n, min), max);
+
+// Flatten 1-level
+const flatten1 = arr => [].concat(...arr);
+```
+
+## Theory for Key Topics
+
+### Variables and Data Types
+- Primitives are immutable and stored by value; objects/arrays/functions are reference types stored on the heap, and variables hold references.
+- `let` and `const` are block-scoped and live in the Temporal Dead Zone until initialized; `var` is function-scoped and hoisted with `undefined` initialization.
+
+### Hoisting
+- Declarations are hoisted to the top of their scope. Function declarations hoist with their definitions; variable declarations hoist without initialization. Accessing `let`/`const` before declaration throws due to TDZ.
+
+### Scope and Closures
+- JS uses lexical scoping: the scope of a variable is determined by its position in code. Closures capture variables from outer scopes, enabling encapsulation, partial application, and factory patterns. Beware of common pitfalls (loop variables captured by closures—use `let`).
+
+### Functions and this
+- Function declaration vs expression vs arrow: arrows have lexical `this` (no own `this`, `arguments`, or `prototype`). `bind` permanently sets `this`; `call`/`apply` set `this` for a single invocation.
+
+### Prototypes and Classes
+- Every object has an internal `[[Prototype]]` pointing to another object used for property lookup. `Class` syntax wraps prototypal inheritance with sugar (constructor, methods on prototype, `extends` for inheritance).
+
+### Destructuring, Spread, Rest
+- Destructuring extracts properties/elements by pattern. Spread copies enumerable properties/elements. Rest collects remaining properties/elements. Prefer immutable updates using spread for predictability.
+
+### Array Methods and Complexity
+- Pure methods: `map`, `filter`, `reduce`, `slice`, `concat` do not mutate. Mutating methods: `push`, `pop`, `splice`, `sort`. Consider algorithmic complexity when chaining operations on large arrays.
+
+### Promises and Async/Await
+- Promise states: pending → fulfilled/rejected. Microtasks queue ensures `then/catch/finally` handlers run after current call stack. With async/await, parallelize independent async work using `Promise.all` and catch errors with `try/catch`.
+
+### Event Loop
+- Tasks (macrotasks) include timers, I/O callbacks; microtasks include Promises. Microtasks run to completion before the event loop proceeds to the next macrotask. Over-queuing microtasks can starve rendering.
+
+### Error Handling
+- Synchronous errors with try/catch. For promises, attach `.catch` or wrap in async/await try/catch. Unhandled promise rejections can crash the process in Node (depending on version); always handle.
+
+### Modules
+- ESM enables static analysis and tree-shaking; CJS resolves synchronously at runtime. Prefer ESM for modern toolchains. Avoid circular dependencies; refactor shared pieces.
+
+### Equality and Coercion
+- `===` avoids coercion. Abstract equality (`==`) follows complex rules (e.g., `[] == ![]` is true). Prefer strict equality except when intentionally leveraging coercion with clear tests.
+
+### Event Propagation
+- Capturing: root → target; Bubbling: target → root. Use event delegation by listening on a common ancestor and filtering by `event.target` to handle dynamic lists efficiently.

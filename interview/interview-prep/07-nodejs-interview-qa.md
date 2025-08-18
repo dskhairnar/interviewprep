@@ -1,0 +1,153 @@
+Node.js Interview Q&A — Tailored to Dinesh Santosh Khairnar
+
+Q1) What is the Node.js event loop and why is it important?
+A) The event loop is the core runtime mechanism that processes callbacks and non‑blocking I/O. It enables Node.js to handle many concurrent requests efficiently on a single thread by offloading I/O to the OS/libuv and scheduling callbacks across phases (timers, pending callbacks, idle/prepare, poll, check, close). This drives scalability in APIs like the EMS backend.
+
+Q2) How do you prevent blocking the event loop in a Node.js API?
+A) Avoid CPU‑heavy synchronous operations; use asynchronous APIs, worker_threads or child_process for CPU‑bound tasks (e.g., resume parsing), paginate large responses, stream large files, and profile with clinic/flamegraphs to find hotspots.
+
+Q3) Explain the difference between process.nextTick and setImmediate.
+A) process.nextTick schedules a microtask to run before the next event loop phase (higher priority), while setImmediate queues a callback to run in the check phase after I/O events. Use nextTick sparingly to avoid starvation.
+
+Q4) How would you structure an Express.js project for maintainability?
+A) Layered modules: routes → controllers → services → repositories/DAOs → models; shared middleware (auth, validation, error handler), config via environment variables, utilities (logger, response helpers), and feature‑based folders for larger apps (e.g., employees, departments, auth in EMS).
+
+Q5) How do Express middlewares work?
+A) Middlewares are functions with signature (req, res, next) that can read/modify request/response or short‑circuit the pipeline. They execute in order of registration, enabling concerns like logging, CORS, auth, validation, rate limiting, and centralized error handling.
+
+Q6) How do you implement authentication in Node.js using JWT?
+A) On login: validate credentials → issue short‑lived access token (JWT) and long‑lived refresh token (httpOnly, secure). Verify JWT in a middleware for protected routes. Store refresh tokens securely (DB/Redis with rotation). Example used in EMS to persist sessions across tabs and refreshes.
+
+Q7) What are best practices for handling refresh tokens?
+A) httpOnly + Secure cookies, short access token TTL, longer refresh TTL, token rotation (invalidate old on use), store in server‑side store with device binding, detect reuse, and provide logout/all‑sessions revoke.
+
+Q8) How do you protect Express APIs following OWASP guidelines?
+A) Validate and sanitize inputs (celebrate/joi/zod), enforce authZ (RBAC/ABAC), use Helmet, CORS with allow‑list, rate limiting (express‑rate‑limit), prevent NoSQL/SQL injection, CSRF protection for stateful apps, secure headers, robust error handling, avoid leaking stack traces, and log security events.
+
+Q9) What is CORS and how did you configure it?
+A) Cross‑Origin Resource Sharing controls which origins can access resources. Configure allowed origins (Netlify frontend), methods, headers, credentials, and preflight cache. Avoid wildcard with credentials; use explicit allow‑lists per environment.
+
+Q10) How do you manage configuration securely in Node.js?
+A) Use environment variables (.env with dotenv) and a config module that validates required keys (Joi/zod). Never commit secrets; separate dev/stage/prod configs; rotate keys and use secret managers for production.
+
+Q11) How do you implement role‑based access control (RBAC) in Express?
+A) Encode roles/permissions in JWT or fetch from DB. Add an authorization middleware that checks req.user.role against route‑level required permissions. For EMS: admin can create/update/delete employees; normal users can read their own data.
+
+Q12) What are common security headers you enable?
+A) Strict‑Transport‑Security, X‑Content‑Type‑Options, X‑Frame‑Options or CSP frame‑ancestors, Content‑Security‑Policy, Referrer‑Policy, Permissions‑Policy. Helmet provides sane defaults.
+
+Q13) How do you handle input validation in Express?
+A) Define schemas (Joi/zod/Yup) for params, query, and body. Validate in a middleware before controllers. Return 400 with standardized error shape. This prevents injection and ensures API contracts in EMS and Resume Sorting apps.
+
+Q14) How do you design RESTful APIs?
+A) Resource‑oriented routes, nouns not verbs, proper status codes, HATEOAS optional, use pagination (limit/offset or cursor), filtering, sorting, consistent error structure, ETags/If‑None‑Match for caching, and OpenAPI/Swagger for documentation.
+
+Q15) How do you implement pagination with MongoDB?
+A) Use limit/skip for simple cases; for large data use cursor/seek pagination via a stable sort field (e.g., _id). Expose next/prev cursors. Ensure appropriate indexes to keep queries efficient.
+
+Q16) What MongoDB indexes would you add for the EMS?
+A) Index on employeeId (unique), email (unique), department, status, compound indexes for frequent filters (department + status), and TTL indexes for ephemeral tokens or audit logs if needed.
+
+Q17) How do you prevent NoSQL injection in MongoDB?
+A) Validate and whitelist fields, use libraries that sanitize (mongo‑sanitize), avoid directly spreading client input into query operators, and use parameterized patterns in ORMs like Mongoose.
+
+Q18) How do you implement transactions in MongoDB?
+A) For multi‑document atomicity (e.g., moving an employee across collections), start a session and transaction with withTransaction; ensure collections are in a replica set; handle retries on transient errors.
+
+Q19) How do you handle file uploads securely?
+A) Validate MIME and size, store outside web root or use object storage, generate random filenames, scan if needed, never trust client content‑type, and strip metadata. For resume uploads, use streaming to avoid buffering large files.
+
+Q20) How do streams help performance in Node.js?
+A) Streams process data chunk‑by‑chunk (Readable/Writable/Transform/Duplex), reducing memory pressure and enabling backpressure. Useful for large exports, log piping, and file uploads in the Resume Sorting app.
+
+Q21) How do you structure centralized error handling in Express?
+A) Use an error‑handling middleware (err, req, res, next). Convert known errors to typed AppError with statusCode/code; mask internal details in prod; log with correlation ids; send consistent JSON responses.
+
+Q22) What is the difference between npm dependencies and devDependencies?
+A) dependencies are required at runtime (express, mongoose). devDependencies are only needed during development/build/test (nodemon, jest). Keep prod deploys lean by installing with --omit=dev.
+
+Q23) How do you implement logging?
+A) Use Winston/Pino for structured logs (JSON), add request id via morgan + correlation middleware, log at appropriate levels, and ship to a centralized system. Include key business events (login, admin actions).
+
+Q24) How do you test Express APIs?
+A) Use Jest + Supertest for integration tests, mock external services, seed an in‑memory MongoDB (mongodb‑memory‑server), and run CI on push. Aim for tests on auth, RBAC, validation, and edge cases.
+
+Q25) How do you secure cookies in a production deployment?
+A) httpOnly, Secure, SameSite=Lax/Strict, set domain/path scopes, short TTLs, and rotate secrets. Behind HTTPS only.
+
+Q26) What is rate limiting and how would you add it?
+A) Restricts request rates per client to prevent abuse. Implement with express‑rate‑limit or a gateway (NGINX/Cloudflare). Use different buckets per route (auth stricter) and per API key/IP/user.
+
+Q27) How do you handle cross‑site scripting (XSS) in a Node/Express app?
+A) Sanitize inputs, escape outputs on the frontend, use CSP via Helmet, avoid dangerouslySetInnerHTML in React, and avoid reflecting untrusted data in error pages.
+
+Q28) Describe your deployment of EMS.
+A) Backend on Render (Node/Express + MongoDB Atlas), frontend on Netlify. Environment variables set per platform, CORS allow‑list for Netlify domain, health checks, and monitored logs.
+
+Q29) What is the difference between authentication and authorization?
+A) Authentication verifies identity (login, tokens). Authorization decides what an authenticated user can access (roles/permissions) — implemented via RBAC for admin vs user in EMS.
+
+Q30) How would you implement refresh token rotation detection?
+A) Store the latest token family id and version per device/session in DB/Redis. On refresh, verify the presented token is the latest. If an older token appears, detect as reuse and revoke the family.
+
+Q31) How do you handle environment separation?
+A) Separate env files or variable sets for dev/stage/prod, different databases and keys, feature flags, logging levels, and safe defaults. Never use dev secrets in prod.
+
+Q32) How do you optimize MongoDB queries?
+A) Create appropriate indexes, use projection to reduce payloads, avoid $regex leading wildcards, leverage aggregation pipeline stages, analyze with explain(), and cache hot reads where appropriate.
+
+Q33) How do you implement request validation and typed controllers in TypeScript projects?
+A) Define DTO schemas (zod/joi), infer types to controllers, narrow req.body/params to typed objects after validation, and avoid any.
+
+Q34) How do you handle graceful shutdown in Node.js?
+A) Listen for SIGINT/SIGTERM, stop accepting new HTTP connections, drain in‑flight requests, close DB connections, flush logs, exit with proper code. In Render, ensure health checks and termination grace periods.
+
+Q35) What is helmet and why is it useful?
+A) helmet sets HTTP headers to secure apps by default (e.g., HSTS, X‑DNS‑Prefetch‑Control, frameguard, noSniff). It is an easy baseline for OWASP compliance.
+
+Q36) How would you build an admin‑only endpoint in Express?
+A) Protect with auth middleware (verify JWT) then an authorize("admin") middleware. In the controller, validate payload, interact with service layer, and return structured responses. Add tests and logs.
+
+Q37) How do you prevent mass assignment vulnerabilities in Node.js?
+A) Whitelist assignable fields server‑side, ignore unknown fields, and never spread req.body directly into model constructors or updates.
+
+Q38) How do you secure a file‑upload endpoint for resumes?
+A) Use multer/busboy streams, enforce size limits, validate MIME and extension, store in object storage, scan or quarantine if needed, and restrict download URLs with signed links.
+
+Q39) How do you approach performance monitoring?
+A) Use application logs with latency metrics, APM (OpenTelemetry), health checks, and database monitoring (MongoDB Atlas metrics). Track p95/p99 latencies and error rates.
+
+Q40) How would you implement search/filter for employees?
+A) Accept validated filters (department, status, name), build a query with whitelisted fields, use indexes, paginate, and return total counts. For text search, create a text index and apply weights.
+
+Q41) When would you use clustering or multiple Node processes?
+A) For CPU‑bound workloads or to leverage multi‑core servers. Use the cluster module or a process manager (PM2) and ensure sticky sessions if using WebSockets.
+
+Q42) How do you handle secrets rotation?
+A) Keep secrets externalized; rotate keys periodically, support multiple signing keys (kid in JWT header), and roll tokens gradually. Monitor for failures during rotation.
+
+Q43) How do you design an audit log for admin actions?
+A) Append‑only collection with timestamp, actor id, action, target id, metadata, and correlation id. Protect with RBAC, index by actor and time, and avoid PII where possible.
+
+Q44) How do you mitigate brute‑force attacks on login?
+A) Rate limit by IP and username, exponential backoff, captcha on anomalies, and account lockout thresholds with safe UX and notification.
+
+Q45) What is the difference between 401 and 403?
+A) 401 Unauthorized indicates missing/invalid authentication. 403 Forbidden means authenticated but not authorized for the resource.
+
+Q46) How do you version your APIs?
+A) Path (e.g., /v1) or header versioning, deprecate with sunset headers, maintain backward compatibility, and document changes via OpenAPI.
+
+Q47) How do you ensure idempotency in write APIs?
+A) Use idempotency keys for operations like creation, check for existing resources before inserts, and implement upserts where appropriate.
+
+Q48) How do you sanitize error responses?
+A) Map internal errors to safe messages, omit stack traces in production, avoid leaking internal fields or query structures, and include an error code for clients.
+
+Q49) How would you integrate an external auth library like better‑auth?
+A) Configure provider, define session persistence (JWT/cookies), set secure cookies, map user roles, implement callbacks for profile provisioning, and harden with CORS, CSRF, and rate limits.
+
+Q50) Describe a challenging bug you solved in a Node project.
+A) Example: CORS preflight failing on Netlify → fixed by explicitly handling OPTIONS, aligning allowed headers/methods, and ensuring credentials config matched the frontend.
+
+End of Q&A

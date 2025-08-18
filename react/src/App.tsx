@@ -2,6 +2,7 @@
 
 function App(){
   return(
+    
     <>
     <h1>The Main Page</h1>
     <form action="submit">

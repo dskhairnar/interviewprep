@@ -1,15 +1,14 @@
-function isPrime(num) {
-  if (num <= 1) return false; // 0 and 1 are not prime
-  if (num === 2) return true; // 2 is the only even prime
-  if (num % 2 === 0) return false; // eliminate even numbers
+const revString = (str) =>{
+    const array = str.split(" ");
+    let left = 0;
+    let right = array.length -1;
 
-  for (let i = 3; i <= Math.sqrt(num); i += 2) {
-    if (num % i === 0) return false;
-  }
-
-  return true;
+    while(left < right){
+        [array[left],array[right]] = [array[right],array[left]];
+        left++;
+        right--;
+    }
+    return array.join(" ");
 }
 
-// Example
-console.log(isPrime(7));  // true
-console.log(isPrime(10)); // false
+console.log(revString("I am dinesh"));
